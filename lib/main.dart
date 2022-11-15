@@ -5,10 +5,10 @@ import 'app_theme.dart';
 import 'screens/calculator_page.dart';
 
 void main() {
-  runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.grey[850]));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
