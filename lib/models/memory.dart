@@ -26,6 +26,20 @@ class Memory {
     // Se o a tecla clicada for a AC, irá ser acionada a função de limpar os dados do Display, _allClear();
     if (command == 'AC') {
       _allClear();
+    } else if (_lastCommand == '=' && !operations.contains(command)) {
+      if (command == 'backspace') {
+        return;
+      } else {
+        _allClear();
+        _addDigit(command);
+      }
+    } else if (command == 'backspace') {
+      _value = _value.substring(0, _value.length - 1);
+      if (value == "") {
+        _value = '0';
+      }
+
+      debugPrint(_value);
     }
     //Se o usuário tiver clicado em algum botão que contém alguma das Strings definidas na
     //variavel *operations* ele irá passar o comando(String) da operação selecionada.
@@ -79,8 +93,13 @@ class Memory {
       _buffer[1] = 0.0;
 
       // Aqui estamos passando o valor final para o buffer.
-      _value =
-          NumberFormat.currency(locale: 'eu', symbol: "").format(_buffer[0]);
+      _value = NumberFormat.decimalPattern('vi_VN')
+              .format(_buffer[0])
+              .endsWith(',00')
+          ? NumberFormat.decimalPattern('vi_VN')
+              .format(_buffer[0].toStringAsFixed(2))
+          : NumberFormat.decimalPattern('vi_VN').format(_buffer[0]);
+      // NumberFormat.currency(locale: 'eu', symbol: "").format(_buffer[0]);
 
       // Como o resultado sempre será um double, o valor no Display ficara sempre com .0 no final, o que não
       // é interessante em numeros inteiros, então fiz uma variavel para trabalhar nisso.
@@ -139,7 +158,7 @@ class Memory {
   _calculate() {
     switch (_operation) {
       case '%':
-        return _buffer[0] * _buffer[1] / 100;
+        return (_buffer[0] * _buffer[1]) / 100;
       case '/':
         return _buffer[0] / _buffer[1];
       case 'x':
@@ -153,3 +172,7 @@ class Memory {
     }
   }
 }
+// 800 - 100
+// x - 30
+
+// (800 * 30) / 100 = 240
